@@ -9,12 +9,14 @@
 #include "SwappedPositions.hpp"
 
 class ISortingAlgorithm {
+public:
+    using swapFunc = std::function<void(std::vector<int>& v, int, int, ConcurrentQueue<SwappedPositions>&)>;
+
 protected:
-    std::function<void(std::vector<int>& v, int, int, ConcurrentQueue<SwappedPositions>&)> swapAndAddChangesToQueue =
-        [](std::vector<int>& v, int a, int b, ConcurrentQueue<SwappedPositions>& q) {
-            q.push_back({a, b});
-            std::swap(v[a], v[b]);
-        };
+    swapFunc swapAndAddChangesToQueue = [](std::vector<int>& v, int a, int b, ConcurrentQueue<SwappedPositions>& q) {
+        q.push_back({a, b});
+        std::swap(v[a], v[b]);
+    };
 
 public:
     virtual ~ISortingAlgorithm() = default;

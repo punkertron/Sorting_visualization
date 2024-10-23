@@ -1,9 +1,7 @@
 #include "MergeSort.hpp"
 
-using func = std::function<void(std::vector<int>& v, int, int, ConcurrentQueue<SwappedPositions>&)>;
-
 void mergeInPlace(std::vector<int>& arr, int left, int mid, int right, ConcurrentQueue<SwappedPositions>& swappedPositions,
-                  func swapAndAddChangesToQueue)
+                  ISortingAlgorithm::swapFunc swapAndAddChangesToQueue)
 {
     int start = left;
     int start2 = mid + 1;
@@ -36,7 +34,7 @@ void mergeInPlace(std::vector<int>& arr, int left, int mid, int right, Concurren
 
 // Recursive merge sort function
 static void mergeSortInPlace(std::vector<int>& arr, int left, int right, ConcurrentQueue<SwappedPositions>& swappedPositions,
-                             func swapAndAddChangesToQueue)
+                             ISortingAlgorithm::swapFunc swapAndAddChangesToQueue)
 {
     if (left < right) {
         int mid = left + (right - left) / 2;

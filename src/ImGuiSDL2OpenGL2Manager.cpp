@@ -102,7 +102,7 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const c
             p0.y += content_region.y;
             ImVec2 p1 = ImVec2(p0.x + bar_width - 2, p0.y - bar_height);
 
-            ImU32 color = IM_COL32(algoName[0] * 10 % 256, algoName[1] * 10 % 256, algoName[2] * 10 % 256, 255);
+            ImU32 color = IM_COL32((algoName[0] * 10) % 256, (algoName[1] * 10) % 256, (algoName[2] * 10) % 256, 255);
 
             // Draw filled rectangle (bar)
             ImGui::GetWindowDrawList()->AddRectFilled(p0, p1, color);
