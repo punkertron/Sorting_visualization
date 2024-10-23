@@ -1,7 +1,9 @@
 #include "MergeSort.hpp"
-#include <iostream>
 
-void MergeSort::mergeInPlace(std::vector<int>& arr, int left, int mid, int right, ConcurrentQueue<SwappedPositions>& swappedPositions)
+using func = std::function<void(std::vector<int>& v, int, int, ConcurrentQueue<SwappedPositions>&)>;
+
+void mergeInPlace(std::vector<int>& arr, int left, int mid, int right, ConcurrentQueue<SwappedPositions>& swappedPositions,
+                  func swapAndAddChangesToQueue)
 {
     int start = left;
     int start2 = mid + 1;
@@ -11,8 +13,7 @@ void MergeSort::mergeInPlace(std::vector<int>& arr, int left, int mid, int right
         return;
     }
 
-    while (start <= mid && start2 <= right)
-    {
+    while (start <= mid && start2 <= right) {
         // If the element at start is less than or equal to element at start2, it's in the right place
         if (arr[start] <= arr[start2]) {
             start++;
@@ -21,8 +22,7 @@ void MergeSort::mergeInPlace(std::vector<int>& arr, int left, int mid, int right
             int index = start2;
 
             // Swap and shift the elements to maintain order
-            while (index != start)
-            {
+            while (index != start) {
                 swapAndAddChangesToQueue(arr, index, index - 1, swappedPositions);
                 index--;
             }
@@ -35,20 +35,20 @@ void MergeSort::mergeInPlace(std::vector<int>& arr, int left, int mid, int right
 }
 
 // Recursive merge sort function
-void MergeSort::mergeSortInPlace(std::vector<int>& arr, int left, int right, ConcurrentQueue<SwappedPositions>& swappedPositions)
+static void mergeSortInPlace(std::vector<int>& arr, int left, int right, ConcurrentQueue<SwappedPositions>& swappedPositions,
+                             func swapAndAddChangesToQueue)
 {
-    if (left < right)
-    {
+    if (left < right) {
         int mid = left + (right - left) / 2;
 
         // Sort first half
-        mergeSortInPlace(arr, left, mid, swappedPositions);
+        mergeSortInPlace(arr, left, mid, swappedPositions, swapAndAddChangesToQueue);
 
         // Sort second half
-        mergeSortInPlace(arr, mid + 1, right, swappedPositions);
+        mergeSortInPlace(arr, mid + 1, right, swappedPositions, swapAndAddChangesToQueue);
 
         // Merge the sorted halves
-        mergeInPlace(arr, left, mid, right, swappedPositions);
+        mergeInPlace(arr, left, mid, right, swappedPositions, swapAndAddChangesToQueue);
     }
 }
 
@@ -60,5 +60,5 @@ void MergeSort::sort(std::vector<int> arr, ConcurrentQueue<SwappedPositions>& sw
         return;
     }
 
-    mergeSortInPlace(arr, 0, arr.size() - 1, swappedPositions);
+    mergeSortInPlace(arr, 0, arr.size() - 1, swappedPositions, swapAndAddChangesToQueue);
 }
