@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(THIRD_PARTY_DIR third_party)
 
-# set(CMAKE_CXX_FLAGS -fsanitize=leak)
+#set(CMAKE_CXX_FLAGS "-g3 -fsanitize=thread")
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
@@ -19,5 +19,6 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/SortingManager.cpp
     ${SOURCE_DIR}/Controller.cpp
     ${SOURCE_DIR}/BubbleSort.cpp
+    ${SOURCE_DIR}/InsertionSort.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)

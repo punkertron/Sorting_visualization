@@ -84,10 +84,9 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const c
                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-    int i = 0;
     float sizeOnePanel = ImGui::GetContentRegionAvail().y / sortedData.size();
     for (const auto& [algoName, algoData] : sortedData) {
-        ImGui::BeginChild(algoName, ImVec2(0, i * sizeOnePanel), true);
+        ImGui::BeginChild(algoName, ImVec2(0, sizeOnePanel), true);
         ImGui::Text(algoName);
         // Visualization Drawing Code
         int max_val = algoData->size() - 1;
@@ -113,7 +112,6 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const c
         }
         ImGui::EndChild();
         ImGui::Spacing();  // Add spacing between visualizations
-        ++i;
     }
     ImGui::End();
 }

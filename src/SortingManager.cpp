@@ -38,11 +38,13 @@ const std::unordered_map<const char*, const std::vector<int>*> SortingManager::g
     std::unordered_map<const char*, const std::vector<int>*> res;
     for (const auto& algoName : algoNames) {
         std::vector<int>* v = &sortedData[algoName];
-        while (amountOfSwap--) {
+        int i = amountOfSwap;
+        while (i > 0) {
             auto swappedPositions = changesInData[algoName].try_pop_front();
             if (swappedPositions) {
                 std::swap((*v)[swappedPositions->first], (*v)[swappedPositions->second]);
             }
+            --i;
         }
         res[algoName] = v;
     }
