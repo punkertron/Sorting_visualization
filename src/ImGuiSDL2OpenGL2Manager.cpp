@@ -1,16 +1,16 @@
 #include "ImGuiSDL2OpenGL2Manager.hpp"
 
 #include "imgui.h"
-#include "imgui_impl_sdl2.h"
 #include "imgui_impl_opengl2.h"
+#include "imgui_impl_sdl2.h"
 
-ImGuiSDL2OpenGL2Manager::ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext):
+ImGuiSDL2OpenGL2Manager::ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext) :
     window(window), glContext(glContext)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -30,32 +30,34 @@ ImGuiSDL2OpenGL2Manager::~ImGuiSDL2OpenGL2Manager()
 bool ImGuiSDL2OpenGL2Manager::handleExit()
 {
     SDL_Event event;
-    while (SDL_PollEvent(&event))
-    {
+    while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT)
             return true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
+            event.window.windowID == SDL_GetWindowID(window))
             return true;
     }
     return false;
 }
 
-void ImGuiSDL2OpenGL2Manager::updateData(SettingsData& settingsData)
+void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
 {
     ImGui_ImplOpenGL2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
-    
+
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(450, ImGui::GetIO().DisplaySize.y));
 
-    ImGui::Begin("Parameters", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+    ImGui::Begin("Parameters", nullptr,
+                 ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
     ImGui::Text("\nWelcome to the Settings!\n\n\n\n");
 
     ImGui::InputInt("Number of elements", &settingsData.numberOfElements);
-    ImGui::SliderInt("Speed", &settingsData.speed, 1, 5);
+    ImGui::SliderInt("Speed", &settingsData.speed, 1, 200);
 
     ImGui::Text("\n\nSelect algorithms:");
     ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
@@ -65,14 +67,54 @@ void ImGuiSDL2OpenGL2Manager::updateData(SettingsData& settingsData)
     ImGui::Checkbox("Heapsort", &settingsData.isHeapSortSelected);
     ImGui::Checkbox("Shellsort", &settingsData.isShellSortSelected);
     ImGui::Text("\n");
-    
-    {    
-        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
-        ImGui::SetCursorPosX(100);
-        ImGui::Button("Run the animation");
-        ImGui::PopStyleColor(1);
-    }
 
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
+    ImGui::SetCursorPosX(100);
+    settingsData.isStarted = ImGui::Button("Run the animation");
+    ImGui::PopStyleColor(1);
+
+    ImGui::End();
+}
+
+void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedData)
+{
+    ImGui::SetNextWindowPos(ImVec2(450, 0));  // Position right after the menu
+    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - 450, ImGui::GetIO().DisplaySize.y));
+    ImGui::Begin("Visualization Area", nullptr,
+                 ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+    int i = 0;
+    float sizeOnePanel = ImGui::GetContentRegionAvail().y / sortedData.size();
+    for (const auto& [algoName, algoData] : sortedData) {
+        ImGui::BeginChild(algoName, ImVec2(0, i * sizeOnePanel), true);
+        ImGui::Text(algoName);
+        // Visualization Drawing Code
+        int max_val = algoData->size() - 1;
+
+        ImVec2 content_region = ImGui::GetContentRegionAvail();
+
+        float bar_width = content_region.x / static_cast<float>(algoData->size());
+
+        for (size_t i = 0; i < algoData->size(); ++i) {
+            float bar_height = (static_cast<float>((*algoData)[i]) / max_val) * content_region.y;
+
+            ImVec2 p0 = ImGui::GetCursorScreenPos();
+            p0.y += content_region.y;
+            ImVec2 p1 = ImVec2(p0.x + bar_width - 2, p0.y - bar_height);
+
+            ImU32 color = IM_COL32(algoName[0] * 10 % 256, algoName[1] * 10 % 256, algoName[2] * 10 % 256, 255);
+
+            // Draw filled rectangle (bar)
+            ImGui::GetWindowDrawList()->AddRectFilled(p0, p1, color);
+
+            // Move cursor to the next bar position
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + bar_width);
+        }
+        ImGui::EndChild();
+        ImGui::Spacing();  // Add spacing between visualizations
+        ++i;
+    }
     ImGui::End();
 }
 
@@ -81,9 +123,10 @@ void ImGuiSDL2OpenGL2Manager::render()
     // Rendering
     ImGui::Render();
     glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
-    //glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    // glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w,
+    // clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    // glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(window);
 }

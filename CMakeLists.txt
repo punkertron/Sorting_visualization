@@ -16,5 +16,8 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/SDL2OpenGL2Creator.cpp
     ${SOURCE_DIR}/ImGuiSDL2OpenGL2Manager.cpp
     ${SOURCE_DIR}/Controller.cpp
+    ${SOURCE_DIR}/SortingManager.cpp
+    ${SOURCE_DIR}/Controller.cpp
+    ${SOURCE_DIR}/BubbleSort.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)

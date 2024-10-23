@@ -2,8 +2,9 @@
 #define SETTINGSDATA_HPP
 
 struct SettingsData {
+public:
     int numberOfElements = 0;
-    int speed = 2;
+    int speed = 1;
     bool isStarted = false;
     bool isBubbleSortSelected = false;
     bool isInsertionSortSelected = false;
@@ -13,4 +14,4 @@ struct SettingsData {
     bool isShellSortSelected = false;
 };
 
-#endif // SETTINGSDATA_HPP
+#endif  // SETTINGSDATA_HPP

@@ -17,8 +17,14 @@ public:
     SDL2OpenGL2Creator& operator=(const SDL2OpenGL2Creator&) = delete;
     SDL2OpenGL2Creator& operator=(SDL2OpenGL2Creator&&) = delete;
 
-    SDL_Window* getWindow() { return window; }
-    SDL_GLContext getContext() { return glContext; }
+    SDL_Window* getWindow()
+    {
+        return window;
+    }
+    SDL_GLContext getContext()
+    {
+        return glContext;
+    }
 };
 
-#endif // SDL2OPENGL2CREATOR_HPP
+#endif  // SDL2OPENGL2CREATOR_HPP
