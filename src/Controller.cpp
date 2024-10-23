@@ -3,6 +3,7 @@
 #include <unordered_set>
 
 #include "BubbleSort.hpp"
+#include "HeapSort.hpp"
 #include "ISortingAlgorithm.hpp"
 #include "InsertionSort.hpp"
 #include "MergeSort.hpp"
@@ -29,6 +30,9 @@ static std::unordered_set<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(
     }
     if (data.isQuickSortSelected) {
         res.insert(std::make_unique<QuickSort>());
+    }
+    if (data.isHeapSortSelected) {
+        res.insert(std::make_unique<HeapSort>());
     }
     return res;
 }
