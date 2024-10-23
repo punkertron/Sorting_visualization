@@ -20,5 +20,6 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/Controller.cpp
     ${SOURCE_DIR}/BubbleSort.cpp
     ${SOURCE_DIR}/InsertionSort.cpp
+    ${SOURCE_DIR}/MergeSort.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)

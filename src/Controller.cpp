@@ -5,6 +5,7 @@
 #include "BubbleSort.hpp"
 #include "ISortingAlgorithm.hpp"
 #include "InsertionSort.hpp"
+#include "MergeSort.hpp"
 
 Controller::Controller(std::unique_ptr<IGuiManager> guiManager, std::unique_ptr<ISortingManager> sortingManager) :
 
@@ -21,6 +22,9 @@ static std::unordered_set<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(
     }
     if (data.isInsertionSortSelected) {
         res.insert(std::make_unique<InsertionSort>());
+    }
+    if (data.isMergeSortSelected) {
+        res.insert(std::make_unique<MergeSort>());
     }
     return res;
 }
