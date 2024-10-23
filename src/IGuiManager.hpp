@@ -9,6 +9,7 @@
 class IGuiManager {
 public:
     virtual ~IGuiManager() = default;
+    virtual void startRender() = 0;
     virtual bool handleExit() = 0;
     virtual void updateSettings(SettingsData& settingsData) = 0;
     virtual void updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedDAata) = 0;

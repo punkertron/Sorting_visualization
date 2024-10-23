@@ -3,8 +3,10 @@
 #include <stdexcept>
 #include <string>
 
-const int INITIAL_WINDOW_WIDTH = 1280;
-const int INITIAL_WINDOW_HEIGHT = 720;
+static const int INITIAL_WINDOW_WIDTH = 1280;
+static const int INITIAL_WINDOW_HEIGHT = 720;
+static const int MINIMAL_WINDOW_WIDTH = 700;
+static const int MINIMAL_WINDOW_HEIGHT = 400;
 
 SDL2OpenGL2Creator::SDL2OpenGL2Creator() : window(nullptr), glContext(nullptr)
 {
@@ -25,6 +27,7 @@ SDL2OpenGL2Creator::SDL2OpenGL2Creator() : window(nullptr), glContext(nullptr)
         SDL_Quit();
         throw std::runtime_error("SDL initialization failed: " + err);
     }
+    SDL_SetWindowMinimumSize(window, MINIMAL_WINDOW_WIDTH, MINIMAL_WINDOW_HEIGHT);
 
     glContext = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, glContext);

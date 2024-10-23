@@ -12,6 +12,9 @@ private:
     SDL_Window* window;
     SDL_GLContext glContext;
 
+    Uint32 start, elapsed;
+    Uint32 estimated = 1000 / 20;  // estimated 50 fps
+
 public:
     ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext);
     ImGuiSDL2OpenGL2Manager() = delete;
@@ -21,6 +24,7 @@ public:
     ImGuiSDL2OpenGL2Manager& operator=(const ImGuiSDL2OpenGL2Manager&) = delete;
     ImGuiSDL2OpenGL2Manager& operator=(ImGuiSDL2OpenGL2Manager&&) = delete;
 
+    void startRender() override;
     bool handleExit() override;
     void updateSettings(SettingsData& settingsData) override;
     void updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedData);

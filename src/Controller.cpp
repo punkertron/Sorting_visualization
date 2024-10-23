@@ -36,6 +36,7 @@ static std::unordered_set<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(
 void Controller::run()
 {
     while (!isDone) {
+        guiManager->startRender();
         isDone = guiManager->handleExit();
         guiManager->updateSettings(data);
         if (!isStarted && data.isStarted) {

@@ -4,6 +4,9 @@
 #include "imgui_impl_opengl2.h"
 #include "imgui_impl_sdl2.h"
 
+static const int PARAMETERS_WINDOW_WIDTH = 350;
+static const int SLIDER_BAR_WIDTH = 200;
+
 ImGuiSDL2OpenGL2Manager::ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext) :
     window(window), glContext(glContext)
 {
@@ -27,6 +30,11 @@ ImGuiSDL2OpenGL2Manager::~ImGuiSDL2OpenGL2Manager()
     ImGui::DestroyContext();
 }
 
+void ImGuiSDL2OpenGL2Manager::startRender()
+{
+    start = SDL_GetTicks();
+}
+
 bool ImGuiSDL2OpenGL2Manager::handleExit()
 {
     SDL_Event event;
@@ -48,7 +56,7 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
     ImGui::NewFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2(450, ImGui::GetIO().DisplaySize.y));
+    ImGui::SetNextWindowSize(ImVec2(PARAMETERS_WINDOW_WIDTH, ImGui::GetIO().DisplaySize.y));
 
     ImGui::Begin("Parameters", nullptr,
                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
@@ -56,8 +64,10 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
 
     ImGui::Text("\nWelcome to the Settings!\n\n\n\n");
 
-    ImGui::InputInt("Number of elements", &settingsData.numberOfElements);
-    ImGui::SliderInt("Speed", &settingsData.speed, 1, 200);
+    ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
+    ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 500);
+    ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
+    ImGui::SliderInt("Speed", &settingsData.speed, 1, 100);
 
     ImGui::Text("\n\nSelect algorithms:");
     ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
@@ -78,13 +88,14 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
 
 void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedData)
 {
-    ImGui::SetNextWindowPos(ImVec2(450, 0));  // Position right after the menu
-    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - 450, ImGui::GetIO().DisplaySize.y));
+    ImGui::SetNextWindowPos(ImVec2(PARAMETERS_WINDOW_WIDTH, 0));  // Position right after the menu
+    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - PARAMETERS_WINDOW_WIDTH, ImGui::GetIO().DisplaySize.y));
     ImGui::Begin("Visualization Area", nullptr,
                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-    float sizeOnePanel = ImGui::GetContentRegionAvail().y / sortedData.size();
+    float sizeOnePanel =
+        ImGui::GetContentRegionAvail().y / sortedData.size() - 5;  // -5 because we need some more space for one panel
     for (const auto& [algoName, algoData] : sortedData) {
         ImGui::BeginChild(algoName, ImVec2(0, sizeOnePanel), true);
         ImGui::Text(algoName);
@@ -118,13 +129,14 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const c
 
 void ImGuiSDL2OpenGL2Manager::render()
 {
-    // Rendering
+    elapsed = SDL_GetTicks() - start;
+
+    if (elapsed < estimated) {
+        SDL_Delay(estimated - elapsed);
+    }
+
     ImGui::Render();
     glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
-    // glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w,
-    // clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    // glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(window);
 }
