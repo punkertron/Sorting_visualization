@@ -70,29 +70,48 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
         ImGui::BeginDisabled();
     }
 
-    ImGui::Text("\nWelcome to the Settings!\n\n\n");
-
-    ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
-    ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 500);
-    ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
-    ImGui::SliderInt("Speed", &settingsData.speed, 1, 100);
-
-    ImGui::Text("\n\nSelect algorithms:");
-    ImGui::Checkbox("Shellsort", &settingsData.isShellSortSelected);
-    ImGui::Checkbox("Heapsort", &settingsData.isHeapSortSelected);
-    ImGui::Checkbox("Merge sort", &settingsData.isMergeSortSelected);
-    ImGui::Checkbox("Insertion sort", &settingsData.isInsertionSortSelected);
-    ImGui::Checkbox("Quick sort", &settingsData.isQuickSortSelected);
-    ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
-
-    ImGui::Text("\n");
-
-    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
-    ImGui::SetCursorPosX(BUTTON_INDENT_X);
-    if (ImGui::Button("Run the animation", ImVec2(BUTTON_WIDTH, BUTTON_HEIGHT))) {
-        settingsData.isStarted = true;
+    {
+        ImGui::Text("Welcome to the Settings!");
+        ImGui::NewLine();
+        ImGui::NewLine();
     }
-    ImGui::PopStyleColor(1);
+
+    {
+        ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
+        ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 500);
+    }
+
+    // the speed setting should be always enabled
+    {
+        if (isDisabled) {
+            ImGui::EndDisabled();
+        }
+        ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
+        ImGui::SliderInt("Speed", &settingsData.speed, 1, 100);
+        if (isDisabled) {
+            ImGui::BeginDisabled();
+        }
+    }
+
+    {
+        ImGui::Text("\nSelect algorithms:");
+        ImGui::Checkbox("Shellsort", &settingsData.isShellSortSelected);
+        ImGui::Checkbox("Heapsort", &settingsData.isHeapSortSelected);
+        ImGui::Checkbox("Merge sort", &settingsData.isMergeSortSelected);
+        ImGui::Checkbox("Insertion sort", &settingsData.isInsertionSortSelected);
+        ImGui::Checkbox("Quick sort", &settingsData.isQuickSortSelected);
+        ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
+        ImGui::NewLine();
+    }
+
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
+        ImGui::SetCursorPosX(BUTTON_INDENT_X);
+        if (ImGui::Button("Run the animation", ImVec2(BUTTON_WIDTH, BUTTON_HEIGHT))) {
+            settingsData.isStarted = true;
+        }
+        ImGui::PopStyleColor(1);
+    }
 
     if (isDisabled) {
         ImGui::EndDisabled();
@@ -145,7 +164,6 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(
 void ImGuiSDL2OpenGL2Manager::render()
 {
     elapsed = SDL_GetTicks() - start;
-
     if (elapsed < estimated) {
         SDL_Delay(estimated - elapsed);
     }
