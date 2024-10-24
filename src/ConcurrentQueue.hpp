@@ -10,7 +10,7 @@
 template <typename T>
 struct ConcurrentQueue {
 private:
-    std::mutex m;
+    mutable std::mutex m;
     std::condition_variable cv_remove;
     std::condition_variable cv_add;
 
@@ -61,6 +61,12 @@ public:
         queue.pop_front();
         cv_add.notify_one();
         return result;
+    }
+
+    const size_t size() const
+    {
+        std::lock_guard<std::mutex> lock(m);
+        return queue.size();
     }
 };
 
