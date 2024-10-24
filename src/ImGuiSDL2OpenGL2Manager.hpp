@@ -27,7 +27,7 @@ public:
     void startRender() override;
     bool handleExit() override;
     void updateSettings(SettingsData& settingsData) override;
-    void updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedData);
+    void updateVisualizationArea(std::vector<std::pair<const char*, const std::vector<int>*> > sortedData);
     void render() override;
 };
 

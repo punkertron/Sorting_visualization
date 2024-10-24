@@ -3,15 +3,15 @@
 
 struct SettingsData {
 public:
-    int numberOfElements = 0;
-    int speed = 1;
+    int numberOfElements = 100;
+    int speed = 10;
     bool isStarted = false;
-    bool isBubbleSortSelected = false;
-    bool isInsertionSortSelected = false;
-    bool isQuickSortSelected = false;
-    bool isMergeSortSelected = false;
-    bool isHeapSortSelected = false;
-    bool isShellSortSelected = false;
+    bool isBubbleSortSelected = true;
+    bool isInsertionSortSelected = true;
+    bool isQuickSortSelected = true;
+    bool isMergeSortSelected = true;
+    bool isHeapSortSelected = true;
+    bool isShellSortSelected = true;
 };
 
 #endif  // SETTINGSDATA_HPP

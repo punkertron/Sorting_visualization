@@ -1,6 +1,6 @@
 #include "Controller.hpp"
 
-#include <unordered_set>
+#include <vector>
 
 #include "BubbleSort.hpp"
 #include "HeapSort.hpp"
@@ -16,28 +16,29 @@ Controller::Controller(std::unique_ptr<IGuiManager> guiManager, std::unique_ptr<
 {
 }
 
-static std::unordered_set<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(const SettingsData& data)
+static std::vector<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(const SettingsData& data)
 {
-    std::unordered_set<std::unique_ptr<ISortingAlgorithm>> res;
+    std::vector<std::unique_ptr<ISortingAlgorithm>> res;
 
-    if (data.isBubbleSortSelected) {
-        res.insert(std::make_unique<BubbleSort>());
-    }
-    if (data.isInsertionSortSelected) {
-        res.insert(std::make_unique<InsertionSort>());
-    }
-    if (data.isMergeSortSelected) {
-        res.insert(std::make_unique<MergeSort>());
-    }
-    if (data.isQuickSortSelected) {
-        res.insert(std::make_unique<QuickSort>());
+    if (data.isShellSortSelected) {
+        res.push_back(std::make_unique<ShellSort>());
     }
     if (data.isHeapSortSelected) {
-        res.insert(std::make_unique<HeapSort>());
+        res.push_back(std::make_unique<HeapSort>());
     }
-    if (data.isShellSortSelected) {
-        res.insert(std::make_unique<ShellSort>());
+    if (data.isMergeSortSelected) {
+        res.push_back(std::make_unique<MergeSort>());
     }
+    if (data.isInsertionSortSelected) {
+        res.push_back(std::make_unique<InsertionSort>());
+    }
+    if (data.isQuickSortSelected) {
+        res.push_back(std::make_unique<QuickSort>());
+    }
+    if (data.isBubbleSortSelected) {
+        res.push_back(std::make_unique<BubbleSort>());
+    }
+
     return res;
 }
 

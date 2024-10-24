@@ -15,17 +15,17 @@ const std::vector<int> SortingManager::createData(const int numberOfElements)
     return res;
 }
 
-void SortingManager::start(const int numberOfElements,
-                           const std::unordered_set<std::unique_ptr<ISortingAlgorithm>> algorithms)
+void SortingManager::start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms)
 {
     auto dataToSort = createData(numberOfElements);
+
     for (const auto& a : algorithms) {
-        algoNames.insert(a->getName());
-        changesInData[a->getName()];
-        sortedData[a->getName()] = dataToSort;
+        algoNames.push_back(a->getName());
+        changesInData.push_back(std::make_unique<ConcurrentQueue<SwappedPositions>>());
+        sortedData.push_back(dataToSort);
 
         std::thread th([&] {
-            a->sort(dataToSort, changesInData[a->getName()]);
+            a->sort(dataToSort, *changesInData.back());
         });
         if (th.joinable()) {
             th.join();
@@ -33,20 +33,20 @@ void SortingManager::start(const int numberOfElements,
     }
 }
 
-const std::unordered_map<const char*, const std::vector<int>*> SortingManager::getDataFromAlgo(int amountOfSwap)
+const std::vector<std::pair<const char*, const std::vector<int>*>> SortingManager::getDataFromAlgo(int amountOfSwap)
 {
-    std::unordered_map<const char*, const std::vector<int>*> res;
-    for (const auto& algoName : algoNames) {
-        std::vector<int>* v = &sortedData[algoName];
-        int i = amountOfSwap;
-        while (i > 0) {
-            auto swappedPositions = changesInData[algoName].try_pop_front();
+    std::vector<std::pair<const char*, const std::vector<int>*>> res;
+    for (int i = 0; i < algoNames.size(); ++i) {
+        std::vector<int>* v = &sortedData[i];
+        int j = amountOfSwap;
+        while (j > 0) {
+            auto swappedPositions = changesInData[i]->try_pop_front();
             if (swappedPositions) {
                 std::swap((*v)[swappedPositions->first], (*v)[swappedPositions->second]);
             }
-            --i;
+            --j;
         }
-        res[algoName] = v;
+        res.push_back({algoNames[i], v});
     }
     return res;
 }

@@ -70,12 +70,13 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
     ImGui::SliderInt("Speed", &settingsData.speed, 1, 100);
 
     ImGui::Text("\n\nSelect algorithms:");
-    ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
+    ImGui::Checkbox("Shellsort", &settingsData.isShellSortSelected);
+    ImGui::Checkbox("Heapsort", &settingsData.isHeapSortSelected);
+    ImGui::Checkbox("Merge sort", &settingsData.isMergeSortSelected);
     ImGui::Checkbox("Insertion sort", &settingsData.isInsertionSortSelected);
     ImGui::Checkbox("Quick sort", &settingsData.isQuickSortSelected);
-    ImGui::Checkbox("Merge sort", &settingsData.isMergeSortSelected);
-    ImGui::Checkbox("Heapsort", &settingsData.isHeapSortSelected);
-    ImGui::Checkbox("Shellsort", &settingsData.isShellSortSelected);
+    ImGui::Checkbox("Bubble sort", &settingsData.isBubbleSortSelected);
+
     ImGui::Text("\n");
 
     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
@@ -86,7 +87,8 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
     ImGui::End();
 }
 
-void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const char*, const std::vector<int>*> sortedData)
+void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(
+    std::vector<std::pair<const char*, const std::vector<int>*> > sortedData)
 {
     ImGui::SetNextWindowPos(ImVec2(PARAMETERS_WINDOW_WIDTH, 0));  // Position right after the menu
     ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - PARAMETERS_WINDOW_WIDTH, ImGui::GetIO().DisplaySize.y));
