@@ -4,7 +4,7 @@
 struct SettingsData {
 public:
     int numberOfElements = 100;
-    int speed = 10;
+    int speed = 15;
     bool isStarted = false;
     bool isBubbleSortSelected = true;
     bool isInsertionSortSelected = true;
