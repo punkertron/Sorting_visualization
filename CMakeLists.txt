@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(THIRD_PARTY_DIR third_party)
 
-set(CMAKE_CXX_FLAGS "-g3 -fsanitize=thread")
+# set(CMAKE_CXX_FLAGS "-g3 -fsanitize=thread")
+# set(CMAKE_CXX_FLAGS "-g3 -fsanitize=address -fsanitize=leak -fsanitize=undefined")
 
 add_subdirectory(${THIRD_PARTY_DIR})
 
