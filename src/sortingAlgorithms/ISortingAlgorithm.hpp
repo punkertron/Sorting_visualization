@@ -5,8 +5,8 @@
 #include <functional>
 #include <vector>
 
-#include "ConcurrentQueue.hpp"
-#include "SwappedPositions.hpp"
+#include "../ConcurrentQueue.hpp"
+#include "../SwappedPositions.hpp"
 
 class ISortingAlgorithm {
 public:

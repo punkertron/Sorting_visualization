@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "ISortingAlgorithm.hpp"
+#include "sortingAlgorithms/ISortingAlgorithm.hpp"
 
 class ISortingManager {
 public:

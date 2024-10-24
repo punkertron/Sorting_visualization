@@ -6,9 +6,9 @@
 #include <vector>
 
 #include "ConcurrentQueue.hpp"
-#include "ISortingAlgorithm.hpp"
 #include "ISortingManager.hpp"
 #include "SwappedPositions.hpp"
+#include "sortingAlgorithms/ISortingAlgorithm.hpp"
 
 class SortingManager : public ISortingManager {
 private:

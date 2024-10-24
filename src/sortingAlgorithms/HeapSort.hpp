@@ -1,19 +1,19 @@
-#ifndef SHELL_SORT_HPP
-#define SHELL_SORT_HPP
+#ifndef HEAP_SORT_HPP
+#define HEAP_SORT_HPP
 
 #include <vector>
 
-#include "ConcurrentQueue.hpp"
+#include "../ConcurrentQueue.hpp"
+#include "../SwappedPositions.hpp"
 #include "ISortingAlgorithm.hpp"
-#include "SwappedPositions.hpp"
 
-class ShellSort : public ISortingAlgorithm {
+class HeapSort : public ISortingAlgorithm {
 private:
     void sort(std::vector<int> vector, ConcurrentQueue<SwappedPositions>& swappedPositions) override;
     const char* getName() const override
     {
-        return "Shellsort";
+        return "Heapsort";
     }
 };
 
-#endif  // SHELL_SORT_HPP
+#endif  // HEAP_SORT_HPP

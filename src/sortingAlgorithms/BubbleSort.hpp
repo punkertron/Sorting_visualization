@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "ConcurrentQueue.hpp"
+#include "../ConcurrentQueue.hpp"
+#include "../SwappedPositions.hpp"
 #include "ISortingAlgorithm.hpp"
-#include "SwappedPositions.hpp"
 
 class BubbleSort : public ISortingAlgorithm {
 private:

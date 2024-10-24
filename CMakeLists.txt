@@ -11,6 +11,7 @@ set(THIRD_PARTY_DIR third_party)
 add_subdirectory(${THIRD_PARTY_DIR})
 
 set(SOURCE_DIR src)
+set(ALGORITHMS_DIR sortingAlgorithms)
 add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/main.cpp
     ${SOURCE_DIR}/SDL2OpenGL2Creator.cpp
@@ -18,11 +19,11 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/Controller.cpp
     ${SOURCE_DIR}/SortingManager.cpp
     ${SOURCE_DIR}/Controller.cpp
-    ${SOURCE_DIR}/BubbleSort.cpp
-    ${SOURCE_DIR}/InsertionSort.cpp
-    ${SOURCE_DIR}/MergeSort.cpp
-    ${SOURCE_DIR}/QuickSort.cpp
-    ${SOURCE_DIR}/HeapSort.cpp
-    ${SOURCE_DIR}/ShellSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/BubbleSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/InsertionSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/MergeSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/QuickSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/HeapSort.cpp
+    ${SOURCE_DIR}/${ALGORITHMS_DIR}/ShellSort.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)

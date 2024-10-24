@@ -2,13 +2,13 @@
 
 #include <vector>
 
-#include "BubbleSort.hpp"
-#include "HeapSort.hpp"
-#include "ISortingAlgorithm.hpp"
-#include "InsertionSort.hpp"
-#include "MergeSort.hpp"
-#include "QuickSort.hpp"
-#include "ShellSort.hpp"
+#include "sortingAlgorithms/BubbleSort.hpp"
+#include "sortingAlgorithms/HeapSort.hpp"
+#include "sortingAlgorithms/ISortingAlgorithm.hpp"
+#include "sortingAlgorithms/InsertionSort.hpp"
+#include "sortingAlgorithms/MergeSort.hpp"
+#include "sortingAlgorithms/QuickSort.hpp"
+#include "sortingAlgorithms/ShellSort.hpp"
 
 Controller::Controller(std::unique_ptr<IGuiManager> guiManager, std::unique_ptr<ISortingManager> sortingManager) :
 
