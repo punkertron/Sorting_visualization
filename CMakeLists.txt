@@ -23,5 +23,6 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/MergeSort.cpp
     ${SOURCE_DIR}/QuickSort.cpp
     ${SOURCE_DIR}/HeapSort.cpp
+    ${SOURCE_DIR}/ShellSort.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)

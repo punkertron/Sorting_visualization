@@ -8,6 +8,7 @@
 #include "InsertionSort.hpp"
 #include "MergeSort.hpp"
 #include "QuickSort.hpp"
+#include "ShellSort.hpp"
 
 Controller::Controller(std::unique_ptr<IGuiManager> guiManager, std::unique_ptr<ISortingManager> sortingManager) :
 
@@ -33,6 +34,9 @@ static std::unordered_set<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(
     }
     if (data.isHeapSortSelected) {
         res.insert(std::make_unique<HeapSort>());
+    }
+    if (data.isShellSortSelected) {
+        res.insert(std::make_unique<ShellSort>());
     }
     return res;
 }

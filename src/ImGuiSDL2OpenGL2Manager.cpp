@@ -95,7 +95,7 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(std::unordered_map<const c
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
     float sizeOnePanel =
-        ImGui::GetContentRegionAvail().y / sortedData.size() - 5;  // -5 because we need some more space for one panel
+        ImGui::GetContentRegionAvail().y / sortedData.size() - 6;  // -6 because we need some more space for one panel
     for (const auto& [algoName, algoData] : sortedData) {
         ImGui::BeginChild(algoName, ImVec2(0, sizeOnePanel), true);
         ImGui::Text(algoName);
