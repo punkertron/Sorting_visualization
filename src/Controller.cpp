@@ -50,18 +50,23 @@ void Controller::run()
 
         guiManager->updateSettings(data);
         if (!isStarted && data.isStarted) {
+            isEverStarted = true;
             isStarted = true;
             sortingManager->start(data.numberOfElements, createAlgoClasses(data));
         }
-        if (isStarted) {
+        if (isStarted && !data.isPaused) {
             guiManager->updateVisualizationArea(sortingManager->getDataFromAlgo(data.speed));
+        }
+        if (isEverStarted && (!isStarted || data.isPaused)) {
+            // if user stops the animation (or it's done), we need to resize the Visualization Area
+            guiManager->updateVisualizationArea(sortingManager->getCurrentData());
         }
         guiManager->render();
 
         if (isStarted && sortingManager->isNoMoreDataLeft()) {
             isStarted = false;
             data.isStarted = false;
-            sortingManager->cleanup();
+            data.isPaused = false;
         }
     }
 }

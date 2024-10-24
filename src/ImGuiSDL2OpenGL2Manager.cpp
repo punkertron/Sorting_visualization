@@ -116,6 +116,29 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
     if (isDisabled) {
         ImGui::EndDisabled();
     }
+
+    if (settingsData.isStarted) {
+        bool isPaused = settingsData.isPaused;
+
+        ImGui::NewLine();
+        ImGui::NewLine();
+        if (!isPaused) {
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(240, 39, 39));
+            ImGui::SetCursorPosX(BUTTON_INDENT_X);
+            if (ImGui::Button("Pause", ImVec2(BUTTON_WIDTH, BUTTON_HEIGHT))) {
+                settingsData.isPaused = true;
+            }
+        } else {
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
+            ImGui::SetCursorPosX(BUTTON_INDENT_X);
+            if (ImGui::Button("Resume", ImVec2(BUTTON_WIDTH, BUTTON_HEIGHT))) {
+                settingsData.isPaused = false;
+            }
+        }
+
+        ImGui::PopStyleColor(1);
+    }
+
     ImGui::End();
 }
 

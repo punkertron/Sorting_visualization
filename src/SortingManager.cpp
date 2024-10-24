@@ -15,8 +15,21 @@ const std::vector<int> SortingManager::createData(const int numberOfElements)
     return res;
 }
 
+template <typename T>
+static void cleanupVector(std::vector<T>& v)
+{
+    v.clear();
+    v.shrink_to_fit();
+}
+
 void SortingManager::start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms)
 {
+    // cleanup old data if needed
+    cleanupVector(changesInData);
+    cleanupVector(sortedData);
+    cleanupVector(algoNames);
+    cleanupVector(algoFinished);
+
     auto dataToSort = createData(numberOfElements);
 
     for (const auto& a : algorithms) {
@@ -53,22 +66,19 @@ const std::vector<std::pair<const char*, const std::vector<int>*>> SortingManage
     return res;
 }
 
+const std::vector<std::pair<const char*, const std::vector<int>*>> SortingManager::getCurrentData() const
+{
+    std::vector<std::pair<const char*, const std::vector<int>*>> res;
+    for (int i = 0; i < algoNames.size(); ++i) {
+        res.push_back({algoNames[i], &sortedData[i]});
+    }
+    return res;
+}
+
 bool SortingManager::isNoMoreDataLeft()
 {
     return std::ranges::all_of(algoFinished, std::identity{}) &&
            std::ranges::all_of(changesInData, [](const std::unique_ptr<ConcurrentQueue<SwappedPositions>>& inner) {
                return inner->size() == 0;
            });
-}
-
-void SortingManager::cleanup()
-{
-    changesInData.clear();
-    changesInData.shrink_to_fit();
-    sortedData.clear();
-    sortedData.shrink_to_fit();
-    algoNames.clear();
-    algoNames.shrink_to_fit();
-    algoFinished.clear();
-    algoFinished.shrink_to_fit();
 }

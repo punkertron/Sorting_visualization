@@ -31,8 +31,8 @@ public:
 
     void start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms) override;
     const std::vector<std::pair<const char*, const std::vector<int>*>> getDataFromAlgo(int amountOfSwap) override;
+    const std::vector<std::pair<const char*, const std::vector<int>*>> getCurrentData() const override;
     bool isNoMoreDataLeft() override;
-    void cleanup() override;
 };
 
 #endif  // SORTING_MODEL_HPP

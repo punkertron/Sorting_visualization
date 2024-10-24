@@ -10,6 +10,7 @@ class Controller {
 private:
     bool isDone = false;
     bool isStarted = false;
+    bool isEverStarted = false;  // becomes true after first run
     SettingsData data;
     std::unique_ptr<IGuiManager> guiManager;
     std::unique_ptr<ISortingManager> sortingManager;

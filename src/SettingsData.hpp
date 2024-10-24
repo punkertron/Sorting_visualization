@@ -12,6 +12,7 @@ public:
     bool isMergeSortSelected = true;
     bool isHeapSortSelected = true;
     bool isShellSortSelected = true;
+    bool isPaused = false;
 };
 
 #endif  // SETTINGSDATA_HPP
