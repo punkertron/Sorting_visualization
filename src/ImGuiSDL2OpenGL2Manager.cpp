@@ -6,6 +6,9 @@
 
 static const int PARAMETERS_WINDOW_WIDTH = 350;
 static const int SLIDER_BAR_WIDTH = 200;
+static const int BUTTON_WIDTH = 130;
+static const int BUTTON_HEIGHT = 25;
+static const int BUTTON_INDENT_X = (PARAMETERS_WINDOW_WIDTH - BUTTON_WIDTH) / 2;
 
 ImGuiSDL2OpenGL2Manager::ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext) :
     window(window), glContext(glContext)
@@ -62,7 +65,12 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
                  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
-    ImGui::Text("\nWelcome to the Settings!\n\n\n\n");
+    bool isDisabled = settingsData.isStarted;
+    if (isDisabled) {
+        ImGui::BeginDisabled();
+    }
+
+    ImGui::Text("\nWelcome to the Settings!\n\n\n");
 
     ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
     ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 500);
@@ -80,10 +88,15 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
     ImGui::Text("\n");
 
     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(18, 195, 73));
-    ImGui::SetCursorPosX(100);
-    settingsData.isStarted = ImGui::Button("Run the animation");
+    ImGui::SetCursorPosX(BUTTON_INDENT_X);
+    if (ImGui::Button("Run the animation", ImVec2(BUTTON_WIDTH, BUTTON_HEIGHT))) {
+        settingsData.isStarted = true;
+    }
     ImGui::PopStyleColor(1);
 
+    if (isDisabled) {
+        ImGui::EndDisabled();
+    }
     ImGui::End();
 }
 
