@@ -47,6 +47,7 @@ void Controller::run()
     while (!isDone) {
         guiManager->startRender();
         isDone = guiManager->handleExit();
+
         guiManager->updateSettings(data);
         if (!isStarted && data.isStarted) {
             isStarted = true;
@@ -56,5 +57,11 @@ void Controller::run()
             guiManager->updateVisualizationArea(sortingManager->getDataFromAlgo(data.speed));
         }
         guiManager->render();
+
+        if (isStarted && sortingManager->isNoMoreDataLeft()) {
+            isStarted = false;
+            data.isStarted = false;
+            sortingManager->cleanup();
+        }
     }
 }

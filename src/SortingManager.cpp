@@ -23,9 +23,11 @@ void SortingManager::start(const int numberOfElements, const std::vector<std::un
         algoNames.push_back(a->getName());
         changesInData.push_back(std::make_unique<ConcurrentQueue<SwappedPositions>>());
         sortedData.push_back(dataToSort);
+        algoFinished.push_back(false);
 
         std::thread th([&] {
             a->sort(dataToSort, *changesInData.back());
+            algoFinished.back() = true;
         });
         if (th.joinable()) {
             th.join();
@@ -49,4 +51,24 @@ const std::vector<std::pair<const char*, const std::vector<int>*>> SortingManage
         res.push_back({algoNames[i], v});
     }
     return res;
+}
+
+bool SortingManager::isNoMoreDataLeft()
+{
+    return std::ranges::all_of(algoFinished, std::identity{}) &&
+           std::ranges::all_of(changesInData, [](const std::unique_ptr<ConcurrentQueue<SwappedPositions>>& inner) {
+               return inner->size() == 0;
+           });
+}
+
+void SortingManager::cleanup()
+{
+    changesInData.clear();
+    changesInData.shrink_to_fit();
+    sortedData.clear();
+    sortedData.shrink_to_fit();
+    algoNames.clear();
+    algoNames.shrink_to_fit();
+    algoFinished.clear();
+    algoFinished.shrink_to_fit();
 }

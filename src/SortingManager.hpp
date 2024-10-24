@@ -15,6 +15,7 @@ private:
     std::vector<std::unique_ptr<ConcurrentQueue<SwappedPositions>>> changesInData;
     std::vector<std::vector<int>> sortedData;
     std::vector<const char*> algoNames;
+    std::vector<bool> algoFinished;
 
     const std::vector<int> createData(const int numberOfElements);
     std::random_device rd;
@@ -30,6 +31,8 @@ public:
 
     void start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms) override;
     const std::vector<std::pair<const char*, const std::vector<int>*>> getDataFromAlgo(int amountOfSwap) override;
+    bool isNoMoreDataLeft() override;
+    void cleanup() override;
 };
 
 #endif  // SORTING_MODEL_HPP
