@@ -1,5 +1,7 @@
 #include "Controller.hpp"
 
+#include <algorithm>
+#include <utility>
 #include <vector>
 
 #include "sortingAlgorithms/BubbleSort.hpp"

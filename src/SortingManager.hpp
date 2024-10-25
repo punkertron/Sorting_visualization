@@ -3,12 +3,14 @@
 
 #include <memory>
 #include <random>
+#include <utility>
 #include <vector>
 
 #include "ConcurrentQueue.hpp"
 #include "ISortingManager.hpp"
 #include "SwappedPositions.hpp"
-#include "sortingAlgorithms/ISortingAlgorithm.hpp"
+
+class ISortingAlgorithm;
 
 class SortingManager : public ISortingManager {
 private:

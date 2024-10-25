@@ -3,6 +3,9 @@
 #include <stdexcept>
 #include <string>
 
+#include "SDL.h"
+#include "SDL_error.h"
+
 static const int INITIAL_WINDOW_WIDTH = 1280;
 static const int INITIAL_WINDOW_HEIGHT = 720;
 static const int MINIMAL_WINDOW_WIDTH = 700;

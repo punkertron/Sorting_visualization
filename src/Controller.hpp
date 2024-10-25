@@ -5,6 +5,7 @@
 
 #include "IGuiManager.hpp"
 #include "ISortingManager.hpp"
+#include "SettingsData.hpp"
 
 class Controller {
 private:

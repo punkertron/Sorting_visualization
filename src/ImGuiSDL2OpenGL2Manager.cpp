@@ -1,5 +1,12 @@
 #include "ImGuiSDL2OpenGL2Manager.hpp"
 
+#include <SDL_events.h>
+#include <SDL_opengl.h>
+#include <SDL_timer.h>
+#include <SDL_video.h>
+#include <stddef.h>  // for size_t
+
+#include "SettingsData.hpp"  // for SettingsData
 #include "imgui.h"
 #include "imgui_impl_opengl2.h"
 #include "imgui_impl_sdl2.h"

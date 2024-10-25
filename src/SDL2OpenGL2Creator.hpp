@@ -1,8 +1,7 @@
 #ifndef SDL2OPENGL2CREATOR_HPP
 #define SDL2OPENGL2CREATOR_HPP
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL_video.h>
 
 class SDL2OpenGL2Creator {
 private:

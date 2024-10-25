@@ -1,7 +1,12 @@
 #include "SortingManager.hpp"
 
 #include <algorithm>
+#include <functional>
+#include <numeric>  // for iota
+#include <optional>
 #include <thread>
+
+#include "sortingAlgorithms/ISortingAlgorithm.hpp"
 
 SortingManager::SortingManager() : rng_(rd_())
 {

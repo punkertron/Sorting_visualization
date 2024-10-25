@@ -1,11 +1,15 @@
 #ifndef IGGUISDL2OPENGL2MANAGER_HPP
 #define IGGUISDL2OPENGL2MANAGER_HPP
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL_stdinc.h>  // for Uint32
+#include <SDL_video.h>
+
+#include <utility>
+#include <vector>
 
 #include "IGuiManager.hpp"
-#include "imgui.h"
+
+struct SettingsData;
 
 class ImGuiSDL2OpenGL2Manager : public IGuiManager {
 private:
@@ -27,7 +31,7 @@ public:
     void startRender() override;
     bool handleExit() override;
     void updateSettings(SettingsData& settingsData) override;
-    void updateVisualizationArea(std::vector<std::pair<const char*, const std::vector<int>*> > sortedData);
+    void updateVisualizationArea(std::vector<std::pair<const char*, const std::vector<int>*> > sortedData) override;
     void render() override;
 };
 

@@ -1,8 +1,11 @@
+#include <exception>
 #include <iostream>
 #include <memory>
-#include <stdexcept>
+#include <utility>
 
 #include "Controller.hpp"
+#include "IGuiManager.hpp"
+#include "ISortingManager.hpp"
 #include "ImGuiSDL2OpenGL2Manager.hpp"
 #include "SDL2OpenGL2Creator.hpp"
 #include "SortingManager.hpp"
