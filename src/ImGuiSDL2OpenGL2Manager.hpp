@@ -9,11 +9,11 @@
 
 class ImGuiSDL2OpenGL2Manager : public IGuiManager {
 private:
-    SDL_Window* window;
-    SDL_GLContext glContext;
+    SDL_Window* window_;
+    SDL_GLContext glContext_;
 
-    Uint32 start, elapsed;
-    Uint32 estimated = 1000 / 20;  // estimated 50 fps
+    Uint32 start_, elapsed_;
+    Uint32 estimated_ = 1000 / 20;  // estimated 50 fps
 
 public:
     ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext);

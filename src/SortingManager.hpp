@@ -12,14 +12,14 @@
 
 class SortingManager : public ISortingManager {
 private:
-    std::vector<std::unique_ptr<ConcurrentQueue<SwappedPositions>>> changesInData;
-    std::vector<std::vector<int>> sortedData;
-    std::vector<const char*> algoNames;
-    std::vector<bool> algoFinished;
+    std::vector<std::unique_ptr<ConcurrentQueue<SwappedPositions>>> changesInData_;
+    std::vector<std::vector<int>> sortedData_;
+    std::vector<const char*> algoNames_;
+    std::vector<bool> algoFinished_;
 
     const std::vector<int> createData(const int numberOfElements);
-    std::random_device rd;
-    std::mt19937 rng;
+    std::random_device rd_;
+    std::mt19937 rng_;
 
 public:
     SortingManager();

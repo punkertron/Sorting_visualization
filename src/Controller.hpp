@@ -8,12 +8,12 @@
 
 class Controller {
 private:
-    bool isDone = false;
-    bool isStarted = false;
-    bool isEverStarted = false;  // becomes true after first run
-    SettingsData data;
-    std::unique_ptr<IGuiManager> guiManager;
-    std::unique_ptr<ISortingManager> sortingManager;
+    bool isDone_ = false;
+    bool isStarted_ = false;
+    bool isEverStarted_ = false;  // becomes true after first run
+    SettingsData settingsData_;
+    std::unique_ptr<IGuiManager> guiManager_;
+    std::unique_ptr<ISortingManager> sortingManager_;
 
 public:
     Controller() = delete;

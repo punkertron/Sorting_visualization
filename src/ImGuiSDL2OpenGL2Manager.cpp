@@ -11,7 +11,7 @@ static const int BUTTON_HEIGHT = 25;
 static const int BUTTON_INDENT_X = (PARAMETERS_WINDOW_WIDTH - BUTTON_WIDTH) / 2;
 
 ImGuiSDL2OpenGL2Manager::ImGuiSDL2OpenGL2Manager(SDL_Window* window, SDL_GLContext glContext) :
-    window(window), glContext(glContext)
+    window_(window), glContext_(glContext)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -35,7 +35,7 @@ ImGuiSDL2OpenGL2Manager::~ImGuiSDL2OpenGL2Manager()
 
 void ImGuiSDL2OpenGL2Manager::startRender()
 {
-    start = SDL_GetTicks();
+    start_ = SDL_GetTicks();
 }
 
 bool ImGuiSDL2OpenGL2Manager::handleExit()
@@ -46,7 +46,7 @@ bool ImGuiSDL2OpenGL2Manager::handleExit()
         if (event.type == SDL_QUIT)
             return true;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE &&
-            event.window.windowID == SDL_GetWindowID(window))
+            event.window.windowID == SDL_GetWindowID(window_))
             return true;
     }
     return false;
@@ -186,13 +186,13 @@ void ImGuiSDL2OpenGL2Manager::updateVisualizationArea(
 
 void ImGuiSDL2OpenGL2Manager::render()
 {
-    elapsed = SDL_GetTicks() - start;
-    if (elapsed < estimated) {
-        SDL_Delay(estimated - elapsed);
+    elapsed_ = SDL_GetTicks() - start_;
+    if (elapsed_ < estimated_) {
+        SDL_Delay(estimated_ - elapsed_);
     }
 
     ImGui::Render();
     glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    SDL_GL_SwapWindow(window);
+    SDL_GL_SwapWindow(window_);
 }

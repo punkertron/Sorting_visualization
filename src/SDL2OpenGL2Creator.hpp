@@ -6,8 +6,8 @@
 
 class SDL2OpenGL2Creator {
 private:
-    SDL_Window* window;
-    SDL_GLContext glContext;
+    SDL_Window* window_;
+    SDL_GLContext glContext_;
 
 public:
     SDL2OpenGL2Creator();
@@ -19,11 +19,11 @@ public:
 
     SDL_Window* getWindow()
     {
-        return window;
+        return window_;
     }
     SDL_GLContext getContext()
     {
-        return glContext;
+        return glContext_;
     }
 };
 

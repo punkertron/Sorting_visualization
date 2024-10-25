@@ -10,15 +10,15 @@
 template <typename T>
 struct ConcurrentQueue {
 private:
-    mutable std::mutex m;
-    std::condition_variable cv_remove;
-    std::condition_variable cv_add;
+    mutable std::mutex m_;
+    std::condition_variable cvRemove_;
+    std::condition_variable cvAdd_;
 
-    std::deque<T> queue;
-    size_t max_size;
+    std::deque<T> queue_;
+    size_t maxSize_;
 
 public:
-    ConcurrentQueue(size_t max_size = std::numeric_limits<size_t>::max()) : max_size(max_size)
+    ConcurrentQueue(size_t maxSize = std::numeric_limits<size_t>::max()) : maxSize_(maxSize)
     {
     }
     ~ConcurrentQueue() = default;
@@ -29,44 +29,44 @@ public:
 
     void push_back(T value)
     {
-        std::unique_lock<std::mutex> lock(m);
-        cv_add.wait(lock, [&] {
-            return max_size != queue.size();
+        std::unique_lock<std::mutex> lock(m_);
+        cvAdd_.wait(lock, [&] {
+            return maxSize_ != queue_.size();
         });
 
-        queue.push_back(std::move(value));
-        cv_remove.notify_one();
+        queue_.push_back(std::move(value));
+        cvRemove_.notify_one();
     }
 
     T pop_front()
     {
-        std::unique_lock<std::mutex> lock(m);
-        cv_remove.wait(lock, [&] {
-            return !queue.empty();
+        std::unique_lock<std::mutex> lock(m_);
+        cvRemove_.wait(lock, [&] {
+            return !queue_.empty();
         });
-        T result = queue.front();
-        queue.pop_front();
-        cv_add.notify_one();
+        T result = queue_.front();
+        queue_.pop_front();
+        cvAdd_.notify_one();
         return result;
     }
 
     std::optional<T> try_pop_front()
     {
-        std::lock_guard<std::mutex> lock(m);
+        std::lock_guard<std::mutex> lock(m_);
 
-        if (queue.empty()) {
+        if (queue_.empty()) {
             return std::nullopt;
         }
-        std::optional<T> result = queue.front();
-        queue.pop_front();
-        cv_add.notify_one();
+        std::optional<T> result = queue_.front();
+        queue_.pop_front();
+        cvAdd_.notify_one();
         return result;
     }
 
     const size_t size() const
     {
-        std::lock_guard<std::mutex> lock(m);
-        return queue.size();
+        std::lock_guard<std::mutex> lock(m_);
+        return queue_.size();
     }
 };
 

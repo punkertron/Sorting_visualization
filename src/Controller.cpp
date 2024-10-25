@@ -12,7 +12,7 @@
 
 Controller::Controller(std::unique_ptr<IGuiManager> guiManager, std::unique_ptr<ISortingManager> sortingManager) :
 
-    guiManager(std::move(guiManager)), sortingManager(std::move(sortingManager))
+    guiManager_(std::move(guiManager)), sortingManager_(std::move(sortingManager))
 {
 }
 
@@ -44,29 +44,29 @@ static std::vector<std::unique_ptr<ISortingAlgorithm>> createAlgoClasses(const S
 
 void Controller::run()
 {
-    while (!isDone) {
-        guiManager->startRender();
-        isDone = guiManager->handleExit();
+    while (!isDone_) {
+        guiManager_->startRender();
+        isDone_ = guiManager_->handleExit();
 
-        guiManager->updateSettings(data);
-        if (!isStarted && data.isStarted) {
-            isEverStarted = true;
-            isStarted = true;
-            sortingManager->start(data.numberOfElements, createAlgoClasses(data));
+        guiManager_->updateSettings(settingsData_);
+        if (!isStarted_ && settingsData_.isStarted) {
+            isEverStarted_ = true;
+            isStarted_ = true;
+            sortingManager_->start(settingsData_.numberOfElements, createAlgoClasses(settingsData_));
         }
-        if (isStarted && !data.isPaused) {
-            guiManager->updateVisualizationArea(sortingManager->getDataFromAlgo(data.speed));
+        if (isStarted_ && !settingsData_.isPaused) {
+            guiManager_->updateVisualizationArea(sortingManager_->getDataFromAlgo(settingsData_.speed));
         }
-        if (isEverStarted && (!isStarted || data.isPaused)) {
+        if (isEverStarted_ && (!isStarted_ || settingsData_.isPaused)) {
             // if user stops the animation (or it's done), we need to resize the Visualization Area
-            guiManager->updateVisualizationArea(sortingManager->getCurrentData());
+            guiManager_->updateVisualizationArea(sortingManager_->getCurrentData());
         }
-        guiManager->render();
+        guiManager_->render();
 
-        if (isStarted && sortingManager->isNoMoreDataLeft()) {
-            isStarted = false;
-            data.isStarted = false;
-            data.isPaused = false;
+        if (isStarted_ && sortingManager_->isNoMoreDataLeft()) {
+            isStarted_ = false;
+            settingsData_.isStarted = false;
+            settingsData_.isPaused = false;
         }
     }
 }
