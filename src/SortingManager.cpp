@@ -43,6 +43,9 @@ void SortingManager::start(const int numberOfElements, const std::vector<std::un
         sortedData_.push_back(dataToSort);
         algoFinished_.push_back(false);
 
+        
+        /////////////////////////////////////////////
+        // FIXME: should revisit this strange construction. We wait until every sort is done. Why do we need threads at all?
         std::thread th([&] {
             a->sort(dataToSort, *changesInData_.back());
             algoFinished_.back() = true;
@@ -50,6 +53,7 @@ void SortingManager::start(const int numberOfElements, const std::vector<std::un
         if (th.joinable()) {
             th.join();
         }
+        /////////////////////////////////////////////
     }
 }
 
