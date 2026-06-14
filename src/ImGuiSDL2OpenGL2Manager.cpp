@@ -85,7 +85,7 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
 
     {
         ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
-        ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 500);
+        ImGui::SliderInt("Number of elements", &settingsData.numberOfElements, 1, 10000);
     }
 
     // the speed setting should be always enabled
@@ -94,7 +94,7 @@ void ImGuiSDL2OpenGL2Manager::updateSettings(SettingsData& settingsData)
             ImGui::EndDisabled();
         }
         ImGui::SetNextItemWidth(SLIDER_BAR_WIDTH);
-        ImGui::SliderInt("Speed", &settingsData.speed, 1, 100);
+        ImGui::SliderInt("Speed", &settingsData.speed, 1, 10000);
         if (isDisabled) {
             ImGui::BeginDisabled();
         }
