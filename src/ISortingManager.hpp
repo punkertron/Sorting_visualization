@@ -10,7 +10,7 @@
 class ISortingManager {
 public:
     virtual ~ISortingManager() = default;
-    virtual void start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms) = 0;
+    virtual void start(const int numberOfElements, std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms) = 0;
     virtual const std::vector<std::pair<const char*, const std::vector<int>*>> getDataFromAlgo(int amountOfSwap) = 0;
     virtual const std::vector<std::pair<const char*, const std::vector<int>*>> getCurrentData() const = 0;
     virtual bool isNoMoreDataLeft() = 0;

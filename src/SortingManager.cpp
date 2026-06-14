@@ -1,15 +1,18 @@
 #include "SortingManager.hpp"
 
 #include <algorithm>
-#include <functional>
 #include <numeric>  // for iota
 #include <optional>
-#include <thread>
 
 #include "sortingAlgorithms/ISortingAlgorithm.hpp"
 
 SortingManager::SortingManager() : rng_(rd_())
 {
+}
+
+SortingManager::~SortingManager()
+{
+    joinSortingThreads();
 }
 
 const std::vector<int> SortingManager::createData(const int numberOfElements)
@@ -27,33 +30,47 @@ static void cleanupVector(std::vector<T>& v)
     v.shrink_to_fit();
 }
 
-void SortingManager::start(const int numberOfElements, const std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms)
+void SortingManager::joinSortingThreads()
 {
+    for (auto& thread : sortingThreads_) {
+        if (thread.joinable()) {
+            thread.join();
+        }
+    }
+    cleanupVector(sortingThreads_);
+}
+
+void SortingManager::start(const int numberOfElements, std::vector<std::unique_ptr<ISortingAlgorithm>> algorithms)
+{
+    joinSortingThreads();
+
     // cleanup old data if needed
     cleanupVector(changesInData_);
     cleanupVector(sortedData_);
     cleanupVector(algoNames_);
-    cleanupVector(algoFinished_);
+    std::vector<std::atomic_bool> newAlgoFinished(algorithms.size());
+    algoFinished_.swap(newAlgoFinished);
 
-    auto dataToSort = createData(numberOfElements);
+    const auto dataToSort = createData(numberOfElements);
 
-    for (const auto& a : algorithms) {
+    changesInData_.reserve(algorithms.size());
+    sortedData_.reserve(algorithms.size());
+    algoNames_.reserve(algorithms.size());
+    sortingThreads_.reserve(algorithms.size());
+
+    for (std::size_t i = 0; i < algorithms.size(); ++i) {
+        auto& a = algorithms[i];
         algoNames_.push_back(a->getName());
         changesInData_.push_back(std::make_unique<ConcurrentQueue<SwappedPositions>>());
         sortedData_.push_back(dataToSort);
-        algoFinished_.push_back(false);
+        algoFinished_[i].store(false, std::memory_order_relaxed);
 
-        
-        /////////////////////////////////////////////
-        // FIXME: should revisit this strange construction. We wait until every sort is done. Why do we need threads at all?
-        std::thread th([&] {
-            a->sort(dataToSort, *changesInData_.back());
-            algoFinished_.back() = true;
+        auto* changesQueue = changesInData_.back().get();
+        auto* finished = &algoFinished_[i];
+        sortingThreads_.emplace_back([algorithm = std::move(a), dataToSort, changesQueue, finished]() mutable {
+            algorithm->sort(std::move(dataToSort), *changesQueue);
+            finished->store(true, std::memory_order_release);
         });
-        if (th.joinable()) {
-            th.join();
-        }
-        /////////////////////////////////////////////
     }
 }
 
@@ -86,7 +103,10 @@ const std::vector<std::pair<const char*, const std::vector<int>*>> SortingManage
 
 bool SortingManager::isNoMoreDataLeft()
 {
-    return std::ranges::all_of(algoFinished_, std::identity{}) &&
+    return std::ranges::all_of(algoFinished_,
+                               [](const std::atomic_bool& finished) {
+                                   return finished.load(std::memory_order_acquire);
+                               }) &&
            std::ranges::all_of(changesInData_, [](const std::unique_ptr<ConcurrentQueue<SwappedPositions>>& inner) {
                return inner->size() == 0;
            });
